@@ -2,6 +2,7 @@ import express from 'express'
 import http from 'http'
 import dotenv from 'dotenv'
 import { Server } from 'socket.io'
+import axios from 'axios'
 dotenv.config()
 
 const app = express()
@@ -16,8 +17,9 @@ const io=new Server(server, {
 
 io.on("connection", (socket) => {
   console.log('user connected', socket.id);
-  socket.on('identity', (userId)=>{
+  socket.on('identity', async(userId)=>{
     console.log('userId', userId);
+    await axios.post(`${process.env.NEXT_BASE_URL}/api/socket/connect`, {userId, socketId:socket.id})
   })
 
   socket.on('disconnect', ()=>{
