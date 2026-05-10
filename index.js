@@ -47,7 +47,18 @@ io.on("connection", (socket) => {
     socket.on(
         'update-location',
         async ({ userId, latitude, longitude }) => {
-
+          // Save userId and socketId in database
+          const location={
+            type:'Point',
+            coordinates:[longitude,latitude]
+          }
+        await axios.post(
+            `${process.env.NEXT_BASE_URL}/api/socket/update-location`,
+            {
+                userId,
+                location
+            }
+        )
             // Print received location data
             console.log(userId, latitude, longitude);
         }
